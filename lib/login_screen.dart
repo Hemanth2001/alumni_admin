@@ -1,8 +1,9 @@
-import 'package:alumni_admin/feed_page.dart';
 import 'package:alumni_admin/home_screen.dart';
-import 'package:alumni_admin/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'dart:core';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -43,6 +44,30 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     // TODO: Implement your own login logic here using the entered USN and password
+    final adminDoc = await FirebaseFirestore.instance.collection('admin_user').doc(_usnController.text).get();
+    print(adminDoc);
+    final adminData = adminDoc?.data();
+    print(adminData);
+    final adminPassword = adminData?['password'];
+    print(adminData?['password']);
+
+    if (_passwordController.text == adminPassword) {
+      print("login");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('isLoggedIn',1);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      // Admin login successful, continue with your logic
+    } else {
+      print("logout");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+      // Invalid credentials, show an error message
+    }
 
     // Simulating a delay for 3 seconds
     await Future.delayed(Duration(seconds: 3));
@@ -54,18 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.clear();
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
+
   }
 
-  void _register() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) =>HomePage()),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
+                      backgroundColor: Colors.green,
                       padding: EdgeInsets.symmetric(
                           horizontal: 32.0, vertical: 16.0),
                       textStyle: TextStyle(
@@ -146,22 +163,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         : Text('Log In'),
                   ),
                 ),
-                // Container(
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       TextButton(
-                //         onPressed: () {},
-                //         child: Text('Forgot password?'),
-                //       ),
-                //       Text(' | '),
-                //       TextButton(
-                //         onPressed: () {_register();},
-                //         child: Text('Sign up'),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
           ),

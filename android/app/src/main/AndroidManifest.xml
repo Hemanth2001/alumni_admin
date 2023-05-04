@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.alumni_admin">
-   <application
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
         android:label="alumni_admin"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

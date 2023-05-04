@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "642613533414",
+    "project_id": "alumni-27942",
+    "storage_bucket": "alumni-27942.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642613533414:android:243734e32f5ab13260f927",
+        "android_client_info": {
+          "package_name": "com.example.alumni_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "642613533414-soibu750dabi71tfhtu2u06ieda7s8k1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWJQg4gpTpMgx1T57qT3lAmMSNIROYG8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "642613533414-soibu750dabi71tfhtu2u06ieda7s8k1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
