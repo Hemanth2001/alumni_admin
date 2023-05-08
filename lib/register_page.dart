@@ -1,3 +1,4 @@
+import 'package:alumni_admin/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
       'profession': _profession.text,
       'password': _password.text,
     });
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomePage()));
 
   }
 

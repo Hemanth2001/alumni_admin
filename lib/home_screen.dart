@@ -1,7 +1,9 @@
+import 'package:alumni_admin/create_invitation.dart';
 import 'package:alumni_admin/create_post.dart';
 import 'package:alumni_admin/invitation_page.dart';
 import 'package:alumni_admin/login_screen.dart';
 import 'package:alumni_admin/register_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,10 +16,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   String id ="";
-
+  int total=0;
   void initState() {
     super.initState();
    sd();
+   getTotalUsersCount();
+   print(total);
 
   }
 
@@ -29,6 +33,16 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
     );
+  }
+
+
+  Future<void> getTotalUsersCount() async {
+    final querySnapshot = await FirebaseFirestore.instance.collection('users').get();
+    print(querySnapshot.size.toInt());
+    setState(() {
+      total= querySnapshot.size.toInt();
+
+    });
   }
 
 
@@ -73,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('assets/profile_image.png'),
+                    backgroundImage: AssetImage('images/profile_image.jpg'),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -85,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'johndoe@example.com',
+                    'admin@svce.edu.in',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
@@ -98,7 +112,10 @@ class _HomePageState extends State<HomePage> {
               leading: Icon(Icons.home),
               title: Text('Home'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage()));
               },
             ),
             ListTile(
@@ -145,11 +162,11 @@ class _HomePageState extends State<HomePage> {
               children: [
                 AlumniCounter(
                   label: 'Total Alumni',
-                  count: 500,
+                  count: total,
                 ),
                 AlumniCounter(
                   label: 'Active Alumni',
-                  count: 300,
+                  count: 1,
                 ),
               ],
             ),
@@ -183,6 +200,10 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InvitationAdminPage()));
                     // Navigate to create invitation page
                   },
                   child: Text('Create Invitation'),
