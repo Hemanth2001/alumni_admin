@@ -1,24 +1,56 @@
 import 'package:alumni_admin/create_post.dart';
 import 'package:alumni_admin/invitation_page.dart';
+import 'package:alumni_admin/login_screen.dart';
 import 'package:alumni_admin/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  String id ="";
+
+  void initState() {
+    super.initState();
+   sd();
+
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('isLoggedIn', 0);
+    prefs.setString('ID', "");
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+
+
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
 
-      if(_selectedIndex==1){
+      if (_selectedIndex == 1) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => InvitationPage()));
       }
     });
+  }
+  Future<String> sd() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      id = prefs.getString('ID').toString();
+    });
+
+
+    return id;
   }
   @override
   Widget build(BuildContext context) {
@@ -26,6 +58,83 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Alumni Admin App'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CircleAvatar(
+                    radius: 40,
+                    backgroundImage: AssetImage('assets/profile_image.png'),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                   id,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'johndoe@example.com',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                // navigate to profile page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.notifications),
+              title: Text('Invitations'),
+              onTap: () {
+                Navigator.pop(context);
+                // navigate to invitations page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Friends'),
+              onTap: () {
+                Navigator.pop(context);
+                // navigate to friends page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                logout();
+                // navigate to friends page
+              },
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -52,8 +161,10 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder:
-                    (context)=> RegistrationPage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationPage()));
                     // Navigate to add alumni page
                   },
                   child: Text('Add Alumni'),
@@ -61,8 +172,10 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder:
-                      (context)=> CreatePostPage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreatePostPage()));
                     // Navigate to create post page
                   },
                   child: Text('Create Post'),
@@ -96,7 +209,6 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.notifications),
             label: 'Invitations',
           ),
-
         ],
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.black,

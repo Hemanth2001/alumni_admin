@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -12,6 +13,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _mobileController = TextEditingController();
   final _emailController = TextEditingController();
   final _locationController = TextEditingController();
+  final _profession = TextEditingController();
+  final _password = TextEditingController();
+
+  Future<void> register() async {
+    final userRef = FirebaseFirestore.instance.collection('users').doc(_usnController.text);
+    await userRef.set({
+      'name': _nameController.text,
+      'usn':_usnController.text,
+      'year': int.parse(_yearController.text),
+      'mobile': int.parse(_mobileController.text),
+      'email': _emailController.text,
+      'location': _locationController.text,
+      'profession': _profession.text,
+      'password': _password.text,
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +103,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   hintText: 'Enter your current location',
                 ),
               ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _profession,
+                decoration: InputDecoration(
+                  labelText: 'Profession',
+                  border: OutlineInputBorder(),
+                  hintText: 'Profession',
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _password,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                  hintText: 'Password',
+                ),
+              ),
               SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: () {
+                  register();
                   // handle registration
                 },
                 style: ElevatedButton.styleFrom(

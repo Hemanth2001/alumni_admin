@@ -55,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print("login");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt('isLoggedIn',1);
+      prefs.setString('ID',_usnController.text);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
